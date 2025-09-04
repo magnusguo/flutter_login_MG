@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/src/models/login_user_type.dart';
+import 'package:flutter_login_MG/src/models/login_user_type.dart';
 
 /// Represents a customizable field used in the signup or login form.
 ///
@@ -23,6 +23,7 @@ class UserFormField {
     this.fieldValidator,
     this.userType = LoginUserType.name,
     this.tooltip,
+    this.editable = true,
   }) : displayName = displayName ?? keyName;
 
   /// A unique key used to identify this field's value in the form results.
@@ -63,4 +64,11 @@ class UserFormField {
   ///
   /// Typically used to explain the purpose or constraints of the field.
   final InlineSpan? tooltip;
+
+  /// by Magnus 2025-09-05 03:41:29
+  /// An optional flag indicating whether the field is editable.
+  ///
+  /// If true, the field will be editable by the user.
+  /// If false, the field will be read-only.
+  final bool? editable;
 }

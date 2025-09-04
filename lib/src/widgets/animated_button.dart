@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_login/src/widgets/animated_text.dart';
-import 'package:flutter_login/src/widgets/ring.dart';
+import 'package:flutter_login_MG/src/widgets/animated_text.dart';
+import 'package:flutter_login_MG/src/widgets/ring.dart';
 
 /// A button widget with a built-in loading animation driven by an [AnimationController].
 ///

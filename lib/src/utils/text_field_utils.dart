@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/src/models/login_user_type.dart';
+import 'package:flutter_login_MG/src/models/login_user_type.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// Returns the appropriate autofill hint for a given [LoginUserType].

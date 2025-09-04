@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_login_MG/flutter_login.dart';
 import 'package:flutter_login_example/constants.dart';
 import 'package:flutter_login_example/custom_route.dart';
 import 'package:flutter_login_example/dashboard_screen.dart';
@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   static const routeName = '/auth';
 
-  Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
+  Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 200);
 
   Future<String?> _loginUser(LoginData data) {
     return Future<void>.delayed(loginTime).then((_) {
@@ -55,6 +55,7 @@ class LoginScreen extends StatelessWidget {
       // backgroundImage: const AssetImage('assets/images/bgr.jpg'),
       logoTag: Constants.logoTag,
       titleTag: Constants.titleTag,
+      userType: LoginUserType.phone,
       navigateBackAfterRecovery: true,
       onConfirmRecover: _signupConfirm,
       onConfirmSignup: _signupConfirm,
@@ -70,13 +71,6 @@ class LoginScreen extends StatelessWidget {
           providerNeedsSignUpCallback: () {
             // put here your logic to conditionally show the additional fields
             return Future.value(true);
-          },
-        ),
-        LoginProvider(
-          icon: FontAwesomeIcons.google,
-          label: 'Google',
-          callback: () async {
-            return null;
           },
         ),
         LoginProvider(
@@ -106,6 +100,7 @@ class LoginScreen extends StatelessWidget {
         const UserFormField(
           keyName: 'Username',
           icon: Icon(FontAwesomeIcons.userLarge),
+          editable: false,
         ),
         const UserFormField(keyName: 'Name'),
         const UserFormField(keyName: 'Surname'),

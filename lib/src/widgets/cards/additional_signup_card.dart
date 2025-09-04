@@ -202,6 +202,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
               validator: formField.fieldValidator,
               tooltip: formField.tooltip,
               initialIsoCode: widget.initialIsoCode,
+              enabled: formField.editable ?? true,
             ),
             const SizedBox(
               height: 5,

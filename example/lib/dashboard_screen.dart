@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/theme.dart';
-import 'package:flutter_login/widgets.dart';
+import 'package:flutter_login_MG/theme.dart';
+import 'package:flutter_login_MG/widgets.dart';
 import 'package:flutter_login_example/constants.dart';
 import 'package:flutter_login_example/transition_route_observer.dart';
 import 'package:flutter_login_example/widgets/animated_numeric_text.dart';

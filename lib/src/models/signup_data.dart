@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/src/models/term_of_service.dart';
+import 'package:flutter_login_MG/src/models/term_of_service.dart';
 import 'package:quiver/core.dart';
 
 /// A data model representing signup form input or provider-based registration.

@@ -1,3 +1,11 @@
+## 5.1.1
+Features:
+- Customized by Magnus 2025-09-05 02:03:50
+- bot check 检测是否是真人.
+- more flexible info can be required while signup (验证码 性别 出生地(滚轮选择) 时辰(滚轮选择八字) 本人姓名)
+
+
+
 ## 5.1.0
 Features:
 - Added background image (thanks @alenas !)

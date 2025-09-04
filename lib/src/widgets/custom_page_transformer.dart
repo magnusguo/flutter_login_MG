@@ -1,8 +1,8 @@
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_login/src/utils/math_helper.dart';
-import 'package:flutter_login/src/utils/matrix.dart';
+import 'package:flutter_login_MG/src/utils/math_helper.dart';
+import 'package:flutter_login_MG/src/utils/matrix.dart';
 
 /// A custom 3D page transformer that applies perspective scaling and rotation
 /// as pages are swiped. Creates a visually dynamic carousel-like effect.

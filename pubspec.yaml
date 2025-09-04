@@ -1,7 +1,7 @@
-name: flutter_login
+name: flutter_login_MG
 description: A login widget with login/signup functionalities to help speed up development
-version: 5.1.0
-repository: https://github.com/NearHuscarl/flutter_login
+version: 5.1.1
+repository: https://github.com/magnusguo/flutter_login_MG
 screenshots:
   - description: 'This screenshot shows the default themed login screen..'
     path: demo/basic.png

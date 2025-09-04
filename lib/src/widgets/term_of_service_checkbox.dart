@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/src/models/term_of_service.dart';
+import 'package:flutter_login_MG/src/models/term_of_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A checkbox widget used for displaying and accepting a single [TermOfService].

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_login_MG/flutter_login.dart';
 
 /// Represents the current authentication mode: sign up or login.
 enum AuthMode {

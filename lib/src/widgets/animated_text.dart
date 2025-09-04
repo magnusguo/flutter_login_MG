@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_login/src/utils/math_helper.dart';
-import 'package:flutter_login/src/utils/matrix.dart';
-import 'package:flutter_login/src/utils/widget_helper.dart';
+import 'package:flutter_login_MG/src/utils/math_helper.dart';
+import 'package:flutter_login_MG/src/utils/matrix.dart';
+import 'package:flutter_login_MG/src/utils/widget_helper.dart';
 
 /// The direction in which the text should animate during transitions.
 enum AnimatedTextRotation {

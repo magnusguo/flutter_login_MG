@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:flutter_login/src/widgets/ring.dart';
+import 'package:flutter_login_MG/src/widgets/ring.dart';
 
 /// A custom animated button widget that displays an [IconButton] instead of text,
 /// and animates between a static icon and a loading indicator.

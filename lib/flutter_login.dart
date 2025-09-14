@@ -33,6 +33,8 @@ export 'src/providers/auth.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
 
+export 'src/widgets/cards/slider_captcha_card.dart';  //滑动验证 Slide Captcha 2025-09-14 11:16:07
+
 /// Represents a third-party or custom login method (e.g., Google, Facebook).
 /// Includes an icon or button UI and associated authentication callback.
 class LoginProvider {

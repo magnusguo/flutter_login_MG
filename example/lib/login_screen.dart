@@ -7,9 +7,15 @@ import 'package:flutter_login_example/dashboard_screen.dart';
 import 'package:flutter_login_example/users.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   static const routeName = '/auth';
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
 
   Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 200);
 
@@ -25,9 +31,18 @@ class LoginScreen extends StatelessWidget {
     });
   }
 
-  Future<String?> _signupUser(SignupData data) {
+  Future<String?> _signupUser(SignupData data) async {
+    // 显示滑动验证
+    final captchaResult = await showSliderCaptcha(context);
+    
+    if (!captchaResult) {
+      return '滑动验证失败，请重试';
+    }
+    
+    // 验证通过后，执行注册逻辑
     return Future<void>.delayed(loginTime).then((_) {
-      return null;
+      // 这里可以添加实际的注册逻辑
+      return null; // 返回 null 表示注册成功
     });
   }
 

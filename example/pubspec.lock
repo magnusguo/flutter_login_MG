@@ -269,7 +269,7 @@ packages:
     source: sdk
     version: "0.0.0"
   slider_captcha:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: slider_captcha
       sha256: "0fc2e0e8af7bf0e7ece23b8213e6becf841dd7839a40ad4b2a5071eaf5135774"

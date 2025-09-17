@@ -6,7 +6,7 @@ import 'package:slider_captcha/slider_captcha.dart';
 /// 显示滑动验证码对话框
 ///
 /// 返回 `true` 表示验证成功，`false` 表示验证失败或取消
-Future<bool> showSliderCaptcha(BuildContext context) async {
+Future<bool> showSliderCaptcha(BuildContext context, String image_name) async {
   final captchaController = SliderController();
   return await showDialog<bool>(
         context: context,
@@ -31,7 +31,7 @@ Future<bool> showSliderCaptcha(BuildContext context) async {
                   SliderCaptcha(
                     controller: captchaController,
                     image: Image.asset(
-                      'assets/images/bgr.jpg',
+                      'assets/images/$image_name',
                       fit: BoxFit.fitWidth,
                     ),
                     colorBar: Colors.blue,

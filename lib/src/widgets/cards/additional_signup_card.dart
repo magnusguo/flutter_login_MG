@@ -19,7 +19,7 @@ class _AdditionalSignUpCard extends StatefulWidget {
     }
   }
 
-  final List<UserFormField> formFields;
+  final List<UserFieldBase> formFields;
   final VoidCallback onBack;
   final VoidCallback onSubmitCompleted;
   final LoginTheme? loginTheme;
@@ -30,8 +30,7 @@ class _AdditionalSignUpCard extends StatefulWidget {
   _AdditionalSignUpCardState createState() => _AdditionalSignUpCardState();
 }
 
-class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
-    with TickerProviderStateMixin {
+class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formCompleteSignupKey = GlobalKey();
 
   // Used to remember all text controllers
@@ -56,15 +55,18 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
     super.initState();
 
     _nameControllers = {
-      for (final formField in widget.formFields)
-        formField.keyName: TextEditingController(
-          text: formField.defaultValue,
-        ),
+      for (final field in widget.formFields)
+        if (field.fieldType == UserFieldType.form)
+          field.keyName: TextEditingController(
+            text: (field as UserFormField).defaultValue,
+          ),
     };
 
-    if (_nameControllers.length != widget.formFields.length) {
+    // Check for duplicate keyNames
+    final keyNames = widget.formFields.map((field) => field.keyName).toSet();
+    if (keyNames.length != widget.formFields.length) {
       throw ArgumentError(
-        'Some of the formFields have duplicated names, and this is not allowed.',
+        'Some of the fields have duplicated keyNames, and this is not allowed.',
       );
     }
 
@@ -127,8 +129,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
 
     // We have to convert the Map<String, TextEditingController> to a Map<String, String>
     // and pass it to the function given by the user
-    auth.additionalSignupData =
-        _nameControllers.map((key, value) => MapEntry(key, value.text));
+    auth.additionalSignupData = _nameControllers.map((key, value) => MapEntry(key, value.text));
 
     switch (auth.authType) {
       case AuthType.provider:
@@ -176,33 +177,67 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
 
   Widget _buildFields(double width) {
     return Column(
-      children: widget.formFields.map((UserFormField formField) {
+      children: widget.formFields.map((UserFieldBase field) {
+        return Column(
+          children: [
+            const SizedBox(height: 10),
+            _buildSingleField(field, width),
+            const SizedBox(height: 5),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildSingleField(UserFieldBase field, double width) {
+    switch (field.fieldType) {
+      case UserFieldType.form:
+        final formField = field as UserFormField;
+        return AnimatedTextFormField(
+          userType: formField.userType,
+          controller: _nameControllers[formField.keyName],
+          loadingController: widget.loadingController,
+          width: width,
+          labelText: formField.displayName,
+          prefixIcon: formField.icon ?? const Icon(FontAwesomeIcons.solidCircleUser),
+          keyboardType: getKeyboardType(formField.userType),
+          autofillHints: [
+            getAutofillHints(formField.userType),
+          ],
+          textInputAction: formField.keyName == widget.formFields.last.keyName ? TextInputAction.done : TextInputAction.next,
+          validator: formField.fieldValidator,
+          tooltip: formField.tooltip,
+          initialIsoCode: widget.initialIsoCode,
+          enabled: formField.editable ?? true,
+        );
+      case UserFieldType.button:
+        final buttonField = field as UserButtonField;
+        return AnimatedButtonField(
+          width: width,
+          buttonField: buttonField,
+          loadingController: widget.loadingController,
+          enabled: !_isSubmitting,
+        );
+    }
+  }
+
+  /// Builds a list of button fields based on the provided button field configurations.
+  /// 
+  /// Similar to [_buildFields] but creates button-style widgets instead of input fields.
+  /// Each button displays a left icon, title text, right content text, and right arrow.
+  Widget _buildButtonFields(double width, List<UserButtonField> buttonFields) {
+    return Column(
+      children: buttonFields.map((UserButtonField buttonField) {
         return Column(
           children: [
             const SizedBox(
               height: 10,
             ),
-            AnimatedTextFormField(
-              userType: formField.userType,
-              controller: _nameControllers[formField.keyName],
-              // interval: _fieldAnimationIntervals[widget.formFields.indexOf(formField)],
-              loadingController: widget.loadingController,
+            AnimatedButtonField(
               width: width,
-              labelText: formField.displayName,
-              prefixIcon: formField.icon ??
-                  const Icon(FontAwesomeIcons.solidCircleUser),
-              keyboardType: getKeyboardType(formField.userType),
-              autofillHints: [
-                getAutofillHints(formField.userType),
-              ],
-              textInputAction:
-                  formField.keyName == widget.formFields.last.keyName
-                      ? TextInputAction.done
-                      : TextInputAction.next,
-              validator: formField.fieldValidator,
-              tooltip: formField.tooltip,
-              initialIsoCode: widget.initialIsoCode,
-              enabled: formField.editable ?? true,
+              buttonField: buttonField,
+              loadingController: widget.loadingController,
+              enabled: !_isSubmitting,
             ),
             const SizedBox(
               height: 5,
@@ -229,10 +264,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
     LoginMessages messages,
     LoginTheme? loginTheme,
   ) {
-    final calculatedTextColor =
-        (theme.cardTheme.color!.computeLuminance() < 0.5)
-            ? Colors.white
-            : theme.primaryColor;
+    final calculatedTextColor = (theme.cardTheme.color!.computeLuminance() < 0.5) ? Colors.white : theme.primaryColor;
     return ScaleTransition(
       scale: _buttonScaleAnimation,
       child: MaterialButton(

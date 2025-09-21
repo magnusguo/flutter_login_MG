@@ -113,28 +113,68 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
       additionalSignupFields: [
         const UserFormField(
-          keyName: 'Username',
-          icon: Icon(FontAwesomeIcons.userLarge),
-          editable: false,
+          userType: LoginUserType.intlPhone,
+          keyName: '用户电话号码',
+          // icon:
+          // icon: Icon(FontAwesomeIcons.userLarge),
+          // editable: false,
         ),
-        const UserFormField(keyName: 'Name'),
-        const UserFormField(keyName: 'Surname'),
-        UserFormField(
-          keyName: 'phone_number',
-          displayName: 'Phone Number',
-          userType: LoginUserType.phone,
-          fieldValidator: (value) {
-            final phoneRegExp = RegExp(
-              r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$',
-            );
-            if (value != null &&
-                value.length < 7 &&
-                !phoneRegExp.hasMatch(value)) {
-              return "This isn't a valid phone number";
-            }
-            return null;
+        UserButtonField(
+          keyName: 'gender',
+          title: '性别',
+          icon: const Icon(FontAwesomeIcons.venusMars, size: 18),
+          rightText: '男',
+          rightTextColor: Colors.grey,
+          onTap: (keyName) {
+            print('点击了性别选择: $keyName');
+            // 这里可以打开性别选择对话框
           },
         ),
+        UserButtonField(
+          keyName: 'birthplace',
+          title: '出生地',
+          icon: const Icon(FontAwesomeIcons.locationDot, size: 18),
+          rightText: '选择城市',
+          rightTextColor: Colors.blue,
+          rightTextSize: 13,
+          onTap: (keyName) {
+            print('点击了出生地选择: $keyName');
+            // 这里可以打开城市选择器
+          },
+        ),
+
+          UserButtonField(
+          keyName: 'birthtime',
+          title: '出生时辰',
+          icon: const Icon(FontAwesomeIcons.locationDot, size: 18),
+          rightText: '选择时辰',
+          rightTextColor: Colors.blue,
+          rightTextSize: 13,
+          onTap: (keyName) {
+            print('点击了出生地选择: $keyName');
+            // 这里可以打开城市选择器
+          },
+        ),
+
+        const UserFormField(keyName: '本人姓名'),
+        // const UserFormField(keyName: 'Surname'),
+        // UserFormField(
+        //   keyName: 'phone_number',
+        //   displayName: 'Phone Number',
+        //   userType: LoginUserType.phone,
+        //   fieldValidator: (value) {
+        //     final phoneRegExp = RegExp(
+        //       r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$',
+        //     );
+        //     if (value != null &&
+        //         value.length < 7 &&
+        //         !phoneRegExp.hasMatch(value)) {
+        //       return "This isn't a valid phone number";
+        //     }
+        //     return null;
+        //   },
+        // ),
+        
       ],
       // scrollable: true,
       // hideProvidersTitle: false,

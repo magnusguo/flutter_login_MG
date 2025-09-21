@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_MG/src/models/login_user_type.dart';
+import 'package:flutter_login_MG/src/models/user_field_base.dart';
 
 /// Represents a customizable field used in the signup or login form.
 ///
 /// This class allows you to define additional user input fields beyond the
 /// standard email/username and password. Each field is uniquely identified
 /// by a [keyName] and can include custom validation, icon, tooltips, and more.
-class UserFormField {
+class UserFormField extends UserFieldBase {
   /// Creates a [UserFormField].
   ///
   /// The [keyName] must be unique across all form fields. If [displayName] is
@@ -15,21 +16,20 @@ class UserFormField {
   /// Optional customization includes [defaultValue], [fieldValidator], [icon],
   /// [linkUrl], [userType], and [tooltip].
   const UserFormField({
-    required this.keyName,
+    required String keyName,
     String? displayName,
     this.defaultValue = '',
     this.linkUrl,
     this.icon,
     this.fieldValidator,
     this.userType = LoginUserType.name,
-    this.tooltip,
+    InlineSpan? tooltip,
     this.editable = true,
-  }) : displayName = displayName ?? keyName;
+  }) : displayName = displayName ?? keyName,
+       super(keyName: keyName, enabled: editable ?? true, tooltip: tooltip);
 
-  /// A unique key used to identify this field's value in the form results.
-  ///
-  /// Must be unique across all form fields or an error will be thrown.
-  final String keyName;
+  @override
+  UserFieldType get fieldType => UserFieldType.form;
 
   /// The label text displayed to the user.
   ///
@@ -59,11 +59,6 @@ class UserFormField {
   ///
   /// This controls how the field behaves and appears. Defaults to [LoginUserType.name].
   final LoginUserType userType;
-
-  /// An optional tooltip that may be shown alongside the field.
-  ///
-  /// Typically used to explain the purpose or constraints of the field.
-  final InlineSpan? tooltip;
 
   /// by Magnus 2025-09-05 03:41:29
   /// An optional flag indicating whether the field is editable.

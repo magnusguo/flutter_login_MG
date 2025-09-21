@@ -6,6 +6,7 @@ import 'package:another_transformer_page_view/another_transformer_page_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_MG/flutter_login.dart';
+import 'package:flutter_login_MG/src/models/user_button_field.dart';
 import 'package:flutter_login_MG/src/utils/constants.dart';
 import 'package:flutter_login_MG/src/utils/dart_helper.dart';
 
@@ -16,6 +17,7 @@ import 'package:flutter_login_MG/src/widgets/animated_button.dart';
 import 'package:flutter_login_MG/src/widgets/animated_icon.dart';
 import 'package:flutter_login_MG/src/widgets/animated_text.dart';
 import 'package:flutter_login_MG/src/widgets/animated_text_form_field.dart';
+import 'package:flutter_login_MG/src/widgets/animated_button_field.dart';
 import 'package:flutter_login_MG/src/widgets/custom_page_transformer.dart';
 import 'package:flutter_login_MG/src/widgets/expandable_container.dart';
 import 'package:flutter_login_MG/src/widgets/fade_in.dart';
@@ -106,7 +108,8 @@ class AuthCard extends StatefulWidget {
   final bool hideProvidersTitle;
 
   /// Additional fields to show during the signup flow.
-  final List<UserFormField>? additionalSignUpFields;
+  /// Can include both form fields (UserFormField) and button fields (UserButtonField).
+  final List<UserFieldBase>? additionalSignUpFields;
 
   /// Whether to disable the custom page transition animation.
   final bool disableCustomPageTransformer;

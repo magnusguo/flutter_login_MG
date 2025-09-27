@@ -31,6 +31,9 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
 
   var _isSubmitting = false;
   var _code = '';
+  
+  // Resend code countdown timer (for UI updates)
+  Timer? _resendTimer;
 
   @override
   void initState() {
@@ -40,11 +43,39 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+    
+    // Check and restore countdown state from Auth provider
+    _checkAndRestoreCountdown();
+  }
+
+  void _checkAndRestoreCountdown() {
+    final auth = Provider.of<Auth>(context, listen: false);
+    if (!auth.canResendCode) {
+      _startResendTimer();
+    }
+  }
+
+  void _startResendTimer() {
+    _resendTimer?.cancel();
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      final auth = Provider.of<Auth>(context, listen: false);
+      if (auth.canResendCode) {
+        timer.cancel();
+        if (mounted) {
+          setState(() {}); // Trigger UI update
+        }
+      } else {
+        if (mounted) {
+          setState(() {}); // Update countdown display
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
     _fieldSubmitController.dispose();
+    _resendTimer?.cancel();
     super.dispose();
   }
 
@@ -98,10 +129,25 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     return true;
   }
 
+
   Future<bool> _resendCode() async {
+    final auth = Provider.of<Auth>(context, listen: false);
+    
+    if (!auth.canResendCode) return false;
+    
     FocusScope.of(context).unfocus();
 
-    final auth = Provider.of<Auth>(context, listen: false);
+    // 先进行滑动验证
+    final captchaResult = await showSliderCaptcha(context, 'Verification_Img.png');
+    
+    if (!captchaResult) {
+      // 滑动验证失败，不执行后续逻辑，也不启动倒计时
+      return false;
+    }
+
+    // 检查widget是否还mounted
+    if (!mounted) return false;
+
     final messages = Provider.of<LoginMessages>(context, listen: false);
 
     await _fieldSubmitController.forward();
@@ -134,6 +180,11 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
 
     setState(() => _isSubmitting = false);
     await _fieldSubmitController.reverse();
+    
+    // Set resend time in Auth provider and start timer
+    auth.setResendCodeTime(DateTime.now());
+    _startResendTimer();
+    
     return true;
   }
 
@@ -158,16 +209,29 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
   }
 
   Widget _buildResendCode(ThemeData theme, LoginMessages messages) {
-    return ScaleTransition(
-      scale: widget.loadingController,
-      child: MaterialButton(
-        onPressed: !_isSubmitting ? _resendCode : null,
-        child: Text(
-          messages.resendCodeButton,
-          style: theme.textTheme.bodyMedium,
-          textAlign: TextAlign.left,
-        ),
-      ),
+    return Consumer<Auth>(
+      builder: (context, auth, child) {
+        final canResend = auth.canResendCode;
+        final countdown = auth.resendCountdownSeconds;
+        
+        return ScaleTransition(
+          scale: widget.loadingController,
+          child: MaterialButton(
+            onPressed: (!_isSubmitting && canResend) ? _resendCode : null,
+            child: Text(
+              canResend 
+                ? messages.resendCodeButton
+                : '重新发送 (${countdown}秒)',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: canResend 
+                  ? theme.textTheme.bodyMedium?.color
+                  : theme.disabledColor,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -1,5 +1,6 @@
 library;
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';

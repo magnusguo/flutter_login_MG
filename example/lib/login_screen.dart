@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<String?> _signupUser(SignupData data) async {
     // 显示滑动验证
-    final captchaResult = await showSliderCaptcha(context, 'bgr.jpg');
+    final captchaResult = await showSliderCaptcha(context, 'Verification_Img.png');
     
     if (!captchaResult) {
       return '滑动验证失败，请重试';
@@ -114,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
       additionalSignupFields: [
         const UserFormField(
           userType: LoginUserType.intlPhone,
+
           keyName: '用户电话号码',
           // icon:
           // icon: Icon(FontAwesomeIcons.userLarge),
@@ -126,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
           rightText: '男',
           rightTextColor: Colors.grey,
           onTap: (keyName) {
-            print('点击了性别选择: $keyName');
+            debugPrint('点击了性别选择: $keyName');
             // 这里可以打开性别选择对话框
           },
         ),
@@ -138,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
           rightTextColor: Colors.blue,
           rightTextSize: 13,
           onTap: (keyName) {
-            print('点击了出生地选择: $keyName');
+            debugPrint('点击了出生地选择: $keyName');
             // 这里可以打开城市选择器
           },
         ),
@@ -146,12 +147,12 @@ class _LoginScreenState extends State<LoginScreen> {
           UserButtonField(
           keyName: 'birthtime',
           title: '出生时辰',
-          icon: const Icon(FontAwesomeIcons.locationDot, size: 18),
+          icon: const Icon(FontAwesomeIcons.clock, size: 18),
           rightText: '选择时辰',
           rightTextColor: Colors.blue,
           rightTextSize: 13,
           onTap: (keyName) {
-            print('点击了出生地选择: $keyName');
+            debugPrint('点击了出生地选择: $keyName');
             // 这里可以打开城市选择器
           },
         ),
@@ -311,6 +312,13 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
         return _signupUser(signupData);
+      },
+      onResendCode: (signupData) async {
+        debugPrint('Resend code for: ${signupData.name}');
+        // 模拟发送验证码的延时
+        await Future<void>.delayed(const Duration(seconds: 2));
+        // 返回null表示发送成功，返回错误信息表示发送失败
+        return null;
       },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(

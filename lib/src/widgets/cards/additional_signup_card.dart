@@ -222,7 +222,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
   }
 
   /// Builds a list of button fields based on the provided button field configurations.
-  /// 
+  ///
   /// Similar to [_buildFields] but creates button-style widgets instead of input fields.
   /// Each button displays a left icon, title text, right content text, and right arrow.
   Widget _buildButtonFields(double width, List<UserButtonField> buttonFields) {

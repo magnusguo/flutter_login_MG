@@ -192,6 +192,34 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime? _resendCodeTime;
+
+  /// The time when the resend code was last sent.
+  DateTime? get resendCodeTime => _resendCodeTime;
+  
+  /// Sets the resend code time and notifies listeners.
+  void setResendCodeTime(DateTime? time) {
+    _resendCodeTime = time;
+    notifyListeners();
+  }
+
+  /// Checks if the user can resend the code (60 seconds have passed).
+  bool get canResendCode {
+    if (_resendCodeTime == null) return true;
+    final now = DateTime.now();
+    final difference = now.difference(_resendCodeTime!);
+    return difference.inSeconds >= 60;
+  }
+
+  /// Gets the remaining seconds before the user can resend the code.
+  int get resendCountdownSeconds {
+    if (_resendCodeTime == null) return 0;
+    final now = DateTime.now();
+    final difference = now.difference(_resendCodeTime!);
+    final remaining = 60 - difference.inSeconds;
+    return remaining > 0 ? remaining : 0;
+  }
+
   /// Returns a list of [TermOfServiceResult] based on user selections.
   List<TermOfServiceResult> getTermsOfServiceResults() {
     return termsOfService

@@ -74,12 +74,12 @@ class Auth with ChangeNotifier {
     this.confirmSignupRequired,
     this.onResendCode,
     this.beforeAdditionalFieldsCallback,
-    String email = '',
+    String username = '',
     String password = '',
     String confirmPassword = '',
     AuthMode initialAuthMode = AuthMode.login,
     this.termsOfService = const [],
-  })  : _email = email,
+  })  : _username = username,
         _password = password,
         _confirmPassword = confirmPassword,
         _mode = initialAuthMode;
@@ -156,12 +156,12 @@ class Auth with ChangeNotifier {
     return mode;
   }
 
-  String _email = '';
+  String _username = '';
 
   /// Email or username entered by the user.
-  String get email => _email;
-  set email(String email) {
-    _email = email;
+  String get username => _username;
+  set username(String username) {
+    _username = username;
     notifyListeners();
   }
 
@@ -192,6 +192,19 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+
+  /// 设置从Additional Signup Fields 跳转 verification code page时 是否应该发送验证码 2025-09-28 23:17:01
+  /// 没有此设置, 每次从 additional signup fields 跳转 verification code page时 都会发送验证码 容易被滥用
+  String _codeSentToPhoneNumber = '';
+  /// 如果为空 则还没发送过, 如果不为空 则发送过.
+  String get codeSentToPhoneNumber => _codeSentToPhoneNumber;
+  set codeSentToPhoneNumber(String value) {
+    _codeSentToPhoneNumber = value;
+    notifyListeners();
+  }
+
+
+  ///发送验证码按钮60秒倒计时 
   DateTime? _resendCodeTime;
 
   /// The time when the resend code was last sent.
@@ -219,6 +232,9 @@ class Auth with ChangeNotifier {
     final remaining = 60 - difference.inSeconds;
     return remaining > 0 ? remaining : 0;
   }
+
+ 
+
 
   /// Returns a list of [TermOfServiceResult] based on user selections.
   List<TermOfServiceResult> getTermsOfServiceResults() {

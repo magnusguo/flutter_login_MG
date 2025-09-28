@@ -94,7 +94,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     final error = await auth.onConfirmSignup!(
       _code,
       LoginData(
-        name: auth.email,
+        name: auth.username,
         password: auth.password,
       ),
     );
@@ -114,6 +114,8 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
         messages.flushbarTitleSuccess,
         messages.confirmSignupSuccess,
       );
+      //验证码验证成功了, 清空codeSentToPhoneNumber
+      auth.codeSentToPhoneNumber = '';
     }
 
     setState(() => _isSubmitting = false);
@@ -154,7 +156,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     setState(() => _isSubmitting = true);
     final error = await auth.onResendCode!(
       SignupData.fromSignupForm(
-        name: auth.email,
+        name: auth.username,
         password: auth.password,
         termsOfService: auth.getTermsOfServiceResults(),
       ),

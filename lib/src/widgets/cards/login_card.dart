@@ -93,7 +93,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     super.initState();
 
     final auth = Provider.of<Auth>(context, listen: false);
-    _nameController = TextEditingController(text: auth.email);
+    _nameController = TextEditingController(text: auth.username);
     _passController = TextEditingController(text: auth.password);
     _confirmPassController = TextEditingController(text: auth.confirmPassword);
 
@@ -197,7 +197,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     if (auth.isLogin) {
       error = await auth.onLogin?.call(
         LoginData(
-          name: auth.email,
+          name: auth.username,
           password: auth.password,
         ),
       );
@@ -205,7 +205,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       if (!widget.requireAdditionalSignUpFields) {
         error = await auth.onSignup!(
           SignupData.fromSignupForm(
-            name: auth.email,
+            name: auth.username,
             password: auth.password,
             termsOfService: auth.getTermsOfServiceResults(),
           ),
@@ -214,7 +214,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         if (auth.beforeAdditionalFieldsCallback != null) {
           error = await auth.beforeAdditionalFieldsCallback!(
             SignupData.fromSignupForm(
-              name: auth.email,
+              name: auth.username,
               password: auth.password,
               termsOfService: auth.getTermsOfServiceResults(),
             ),
@@ -346,7 +346,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       if (auth.beforeAdditionalFieldsCallback != null) {
         error = await auth.beforeAdditionalFieldsCallback!(
           SignupData.fromSignupForm(
-            name: auth.email,
+            name: auth.username,
             password: auth.password,
             termsOfService: auth.getTermsOfServiceResults(),
             additionalSignupData: auth.additionalSignupData,
@@ -402,7 +402,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         FocusScope.of(context).requestFocus(_passwordFocusNode);
       },
       validator: widget.userValidator,
-      onSaved: (value) => auth.email = value!,
+      onSaved: (value) => auth.username = value!,
       enabled: !_isSubmitting,
       initialIsoCode: widget.initialIsoCode,
     );

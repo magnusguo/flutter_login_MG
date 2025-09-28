@@ -344,7 +344,7 @@ class FlutterLogin extends StatefulWidget {
     this.onConfirmSignup,
     this.confirmSignupRequired,
     this.onResendCode,
-    this.savedEmail = '',
+    this.savedUsername = '',
     this.savedPassword = '',
     this.initialAuthMode = AuthMode.login,
     this.children,
@@ -486,8 +486,8 @@ class FlutterLogin extends StatefulWidget {
   final SignupCallback? onResendCode;
 
   /// Prefilled (ie. saved from previous session) value at startup for username
-  /// (Auth class calls username email, therefore we use savedEmail here aswell)
-  final String savedEmail;
+  /// (Auth class calls username email, therefore we use saved Username here aswell)
+  final String savedUsername;
 
   /// Prefilled (ie. saved from previous session) value at startup for password (applies both
   /// to Auth class password and confirmation password)
@@ -848,7 +848,7 @@ class _FlutterLoginState extends State<FlutterLogin> with TickerProviderStateMix
             onSignup: widget.onSignup,
             onRecoverPassword: widget.onRecoverPassword,
             loginProviders: widget.loginProviders,
-            email: widget.savedEmail,
+            username: widget.savedUsername,
             password: widget.savedPassword,
             confirmPassword: widget.savedPassword,
             onConfirmRecover: widget.onConfirmRecover,

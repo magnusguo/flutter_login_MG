@@ -120,7 +120,11 @@ class _AnimatedButtonFieldState extends State<AnimatedButtonField> {
           color: Colors.transparent,
           child: InkWell(
             onTap: isEnabled 
-                ? () => widget.buttonField.onTap?.call(widget.buttonField.keyName)
+                ? () async {
+                    if (widget.buttonField.onTap != null) {
+                      await widget.buttonField.onTap!(widget.buttonField.keyName);
+                    }
+                  }
                 : null,
             borderRadius: BorderRadius.circular(12),
             child: Padding(

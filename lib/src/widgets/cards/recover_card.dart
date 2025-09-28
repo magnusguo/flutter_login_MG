@@ -43,7 +43,7 @@ class _RecoverCardState extends State<_RecoverCard>
     super.initState();
 
     final auth = Provider.of<Auth>(context, listen: false);
-    _nameController = TextEditingController(text: auth.email);
+    _nameController = TextEditingController(text: auth.username);
 
     _submitController = AnimationController(
       vsync: this,
@@ -67,7 +67,7 @@ class _RecoverCardState extends State<_RecoverCard>
     _formRecoverKey.currentState!.save();
     await _submitController.forward();
     setState(() => _isSubmitting = true);
-    final error = await auth.onRecoverPassword!(auth.email);
+    final error = await auth.onRecoverPassword!(auth.username);
 
     if (error != null) {
       if (mounted) {
@@ -110,7 +110,7 @@ class _RecoverCardState extends State<_RecoverCard>
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (value) => _submit(),
       validator: widget.userValidator,
-      onSaved: (value) => auth.email = value!,
+      onSaved: (value) => auth.username = value!,
       initialIsoCode: widget.initialIsoCode,
       autofocus: widget.autofocusName,
     );

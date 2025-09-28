@@ -36,6 +36,9 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
   // Used to remember all text controllers
   late Map<String, TextEditingController> _nameControllers;
 
+  // Used to remember all button field values
+  late Map<String, String> _buttonFieldValues;
+
   // List of animation controller for every field
   late List<AnimationController> _fieldAnimationControllers = [];
 
@@ -50,6 +53,13 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
 
   bool _isSubmitting = false;
 
+  /// Updates the value of a button field and triggers a rebuild
+  void updateButtonFieldValue(String keyName, String newValue) {
+    setState(() {
+      _buttonFieldValues[keyName] = newValue;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +70,12 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
           field.keyName: TextEditingController(
             text: (field as UserFormField).defaultValue,
           ),
+    };
+
+    // Initialize button field values with their initial rightText values
+    _buttonFieldValues = {
+      for (final field in widget.formFields)
+        if (field.fieldType == UserFieldType.button) field.keyName: (field as UserButtonField).rightText,
     };
 
     // Check for duplicate keyNames
@@ -129,7 +145,10 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
 
     // We have to convert the Map<String, TextEditingController> to a Map<String, String>
     // and pass it to the function given by the user
-    auth.additionalSignupData = _nameControllers.map((key, value) => MapEntry(key, value.text));
+    // Combine both form field values and button field values
+    final Map<String, String> formFieldData = _nameControllers.map((key, value) => MapEntry(key, value.text));
+    final Map<String, String> combinedData = {...formFieldData, ..._buttonFieldValues};
+    auth.additionalSignupData = combinedData;
 
     switch (auth.authType) {
       case AuthType.provider:
@@ -139,14 +158,16 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
           ),
         );
       case AuthType.userPassword:
-        error = await auth.onSignup!(
-          SignupData.fromSignupForm(
-            name: auth.email,
-            password: auth.password,
-            additionalSignupData: auth.additionalSignupData,
-            termsOfService: auth.getTermsOfServiceResults(),
-          ),
-        );
+        if (auth.codeSentToPhoneNumber == '') {
+          error = await auth.onSignup!(
+            SignupData.fromSignupForm(
+              name: auth.username,
+              password: auth.password,
+              additionalSignupData: auth.additionalSignupData,
+              termsOfService: auth.getTermsOfServiceResults(),
+            ),
+          );
+        }
     }
 
     if (context.mounted) {
@@ -159,13 +180,15 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
       setState(() => _isSubmitting = false);
       return false;
     } else {
-      if (mounted) {
+      if (mounted && auth.codeSentToPhoneNumber == '') {
         showSuccessToast(
           context,
           messages.flushbarTitleSuccess,
           messages.signUpSuccess,
           const Duration(seconds: 4),
         );
+        //验证码发送成功了, 记录codeSentToPhoneNumber
+        auth.codeSentToPhoneNumber = auth.username;
       }
 
       setState(() => _isSubmitting = false);
@@ -212,40 +235,32 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
         );
       case UserFieldType.button:
         final buttonField = field as UserButtonField;
+        // Get the current value from our stored values
+        final currentValue = _buttonFieldValues[buttonField.keyName] ?? buttonField.rightText;
+
+        // Create a wrapped button field that displays current value and can update it
+        final wrappedButtonField = buttonField.copyWith(
+          rightText: currentValue,
+          onValueUpdate: updateButtonFieldValue,
+          onTap: (keyName) async {
+            // Call the original onTap callback if it exists
+            if (buttonField.onTap != null) {
+              final newValue = await buttonField.onTap!(keyName);
+              // If a new value is returned, update the stored value
+              if (newValue != null && newValue != currentValue) {
+                updateButtonFieldValue(keyName, newValue);
+              }
+            }
+            return null; // Return null as we handle the update internally
+          },
+        );
         return AnimatedButtonField(
           width: width,
-          buttonField: buttonField,
+          buttonField: wrappedButtonField,
           loadingController: widget.loadingController,
           enabled: !_isSubmitting,
         );
     }
-  }
-
-  /// Builds a list of button fields based on the provided button field configurations.
-  ///
-  /// Similar to [_buildFields] but creates button-style widgets instead of input fields.
-  /// Each button displays a left icon, title text, right content text, and right arrow.
-  Widget _buildButtonFields(double width, List<UserButtonField> buttonFields) {
-    return Column(
-      children: buttonFields.map((UserButtonField buttonField) {
-        return Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            AnimatedButtonField(
-              width: width,
-              buttonField: buttonField,
-              loadingController: widget.loadingController,
-              enabled: !_isSubmitting,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-          ],
-        );
-      }).toList(),
-    );
   }
 
   Widget _buildSubmitButton(ThemeData theme, LoginMessages messages) {

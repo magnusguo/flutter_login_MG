@@ -23,6 +23,7 @@ class UserButtonField extends UserFieldBase {
     this.rightTextColor,
     this.rightTextSize,
     this.onTap,
+    this.onValueUpdate,
     bool enabled = true,
     InlineSpan? tooltip,
   }) : title = title ?? keyName,
@@ -64,7 +65,15 @@ class UserButtonField extends UserFieldBase {
   /// Callback function called when the button is tapped.
   ///
   /// Receives the [keyName] as parameter for identification.
-  final ValueChanged<String>? onTap;
+  /// Can return a Future<String?> to update the button's displayed value.
+  /// If null is returned, the value remains unchanged.
+  final Future<String?> Function(String keyName)? onTap;
+
+  /// Callback function for updating the button field value.
+  ///
+  /// This is used internally by the form to allow the onTap callback
+  /// to update the displayed value. Should not be set directly by users.
+  final void Function(String keyName, String newValue)? onValueUpdate;
 
 
   /// Creates a copy of this button field with the given fields replaced.
@@ -76,7 +85,8 @@ class UserButtonField extends UserFieldBase {
     TextStyle? rightTextStyle,
     Color? rightTextColor,
     double? rightTextSize,
-    ValueChanged<String>? onTap,
+    Future<String?> Function(String keyName)? onTap,
+    void Function(String keyName, String newValue)? onValueUpdate,
     bool? enabled,
     InlineSpan? tooltip,
   }) {
@@ -89,6 +99,7 @@ class UserButtonField extends UserFieldBase {
       rightTextColor: rightTextColor ?? this.rightTextColor,
       rightTextSize: rightTextSize ?? this.rightTextSize,
       onTap: onTap ?? this.onTap,
+      onValueUpdate: onValueUpdate ?? this.onValueUpdate,
       enabled: enabled ?? this.enabled,
       tooltip: tooltip ?? this.tooltip,
     );

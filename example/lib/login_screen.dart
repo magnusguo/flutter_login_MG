@@ -61,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
@@ -112,23 +113,34 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ],
       additionalSignupFields: [
-        const UserFormField(
-          userType: LoginUserType.intlPhone,
+        UserButtonField(
+          // userType: LoginUserType.contryCodeWithPhoneDisplay,
 
-          keyName: '用户电话号码',
-          // icon:
-          // icon: Icon(FontAwesomeIcons.userLarge),
-          // editable: false,
+          keyName: 'countryCode',
+          icon: const Icon(FontAwesomeIcons.globe, size: 18),
+          title: '手机号国家/区号',
+          rightText: '中国 +86',
+          rightTextColor: Colors.grey,
+          rightTextSize: 13,
+          onTap: (keyName) async {
+            debugPrint('点击了国家/区号选择: $keyName');
+            // 这里可以打开国家/区号选择对话框
+            return null; // 暂时不更新值
+          },
         ),
+
         UserButtonField(
           keyName: 'gender',
-          title: '性别',
+          title: '性 别',
           icon: const Icon(FontAwesomeIcons.venusMars, size: 18),
           rightText: '男',
           rightTextColor: Colors.grey,
-          onTap: (keyName) {
+          onTap: (keyName) async {
             debugPrint('点击了性别选择: $keyName');
             // 这里可以打开性别选择对话框
+            // 模拟用户选择，实际应用中这里会打开选择器对话框
+            // final selectedGender = await _showGenderPicker(context);
+            return null; // 返回选择的值，会自动更新显示
           },
         ),
         UserButtonField(
@@ -138,9 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
           rightText: '选择城市',
           rightTextColor: Colors.blue,
           rightTextSize: 13,
-          onTap: (keyName) {
+          onTap: (keyName) async {
             debugPrint('点击了出生地选择: $keyName');
             // 这里可以打开城市选择器
+            return null; // 暂时不更新值
           },
         ),
 
@@ -151,9 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
           rightText: '选择时辰',
           rightTextColor: Colors.blue,
           rightTextSize: 13,
-          onTap: (keyName) {
-            debugPrint('点击了出生地选择: $keyName');
-            // 这里可以打开城市选择器
+          onTap: (keyName) async {
+            debugPrint('点击了出生时辰选择: $keyName');
+            // 这里可以打开时辰选择器
+            return null; // 暂时不更新值
           },
         ),
 
@@ -278,11 +292,16 @@ class _LoginScreenState extends State<LoginScreen> {
       //   ),
       // ),
       userValidator: (value) {
-        if (!value!.contains('@') || !value.endsWith('.com')) {
-          return "Email must contain '@' and end with '.com'";
-        }
-        return null;
-      },
+           final phoneRegExp = RegExp(
+              r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$',
+            );
+            if (value != null &&
+                value.length < 7 &&
+                !phoneRegExp.hasMatch(value)) {
+              return '请输入正确的手机号, 本步骤无需输入国家区号';
+          }
+          return null;
+        },
       passwordValidator: (value) {
         if (value!.isEmpty) {
           return 'Password is empty';

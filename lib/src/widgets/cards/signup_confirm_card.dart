@@ -264,11 +264,17 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     final messages = Provider.of<LoginMessages>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
     final cardWidth = min<double>(deviceSize.width * 0.75, 360);
     const cardPadding = 16.0;
     final textFieldWidth = cardWidth - cardPadding * 2;
+
+    // 动态构建确认信息文本，包含用户名 2025-10-02 01:54:30
+    final confirmIntroText = auth.username.isNotEmpty
+        ? '${messages.confirmSignupIntro} ${auth.username} ${messages.confirmSignupIntro2}'
+        : messages.confirmSignupIntro;
 
     return FittedBox(
       child: Card(
@@ -288,7 +294,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
                 ScaleTransition(
                   scale: widget.loadingController,
                   child: Text(
-                    messages.confirmSignupIntro,
+                    confirmIntroText,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
                   ),

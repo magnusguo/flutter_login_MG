@@ -158,7 +158,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
           ),
         );
       case AuthType.userPassword:
-        if (auth.codeSentToPhoneNumber == '') {
+        if (auth.codeSentToPhoneNumber=='' || auth.codeSentToPhoneNumber!=auth.username) {
           error = await auth.onSignup!(
             SignupData.fromSignupForm(
               name: auth.username,
@@ -180,7 +180,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
       setState(() => _isSubmitting = false);
       return false;
     } else {
-      if (mounted && auth.codeSentToPhoneNumber == '') {
+      if (mounted && (auth.codeSentToPhoneNumber=='' || auth.codeSentToPhoneNumber!=auth.username)) {
         showSuccessToast(
           context,
           messages.flushbarTitleSuccess,
@@ -300,11 +300,17 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     final messages = Provider.of<LoginMessages>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
     final cardWidth = min<double>(deviceSize.width * 0.75, 360);
     const cardPadding = 16.0;
     final textFieldWidth = cardWidth - cardPadding * 2;
+
+    // 动态构建描述文本，包含用户名
+    final String descriptionText = auth.username.isNotEmpty
+        ? '${auth.username} ${messages.additionalSignUpFormDescription}'
+        : messages.additionalSignUpFormDescription;
 
     return FittedBox(
       child: Card(
@@ -324,7 +330,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
                 ScaleTransition(
                   scale: _buttonScaleAnimation,
                   child: Text(
-                    messages.additionalSignUpFormDescription,
+                    descriptionText,
                     key: kRecoverPasswordIntroKey,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,

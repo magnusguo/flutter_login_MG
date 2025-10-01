@@ -197,7 +197,10 @@ class _LoginScreenState extends State<LoginScreen> {
       // hideForgotPasswordButton: true,
       // hideSignUpButton: true,
       // disableCustomPageTransformer: true,
-      // messages: LoginMessages(
+        messages: LoginMessages(
+         additionalSignUpFormDescription: '您好!\n请填写以下信息完成注册',
+         confirmSignupIntro: '验证码已发送到您的手机:\n',
+         confirmSignupIntro2: '\n请输入验证码以确认您的账户。',
       //   userHint: 'User',
       //   passwordHint: 'Pass',
       //   confirmPasswordHint: 'Confirm',
@@ -213,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //   flushbarTitleError: 'Oh no!',
       //   flushbarTitleSuccess: 'Succes!',
       //   providersTitle: 'login with'
-      // ),
+      ),
       // theme: LoginTheme(
       //   primaryColor: Colors.teal,
       //   accentColor: Colors.yellow,

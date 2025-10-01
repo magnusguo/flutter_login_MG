@@ -33,6 +33,7 @@ class LoginMessages with ChangeNotifier {
     this.additionalSignUpFormDescription =
         defaultAdditionalSignUpFormDescription,
     this.confirmSignupIntro = defaultConfirmSignupIntro,
+    this.confirmSignupIntro2 = defaultConfirmSignupIntro2,
     this.confirmationCodeHint = defaultConfirmationCodeHint,
     this.confirmationCodeValidationError =
         defaultConfirmationCodeValidationError,
@@ -126,8 +127,10 @@ class LoginMessages with ChangeNotifier {
 
   /// Default intro for confirm signup card.
   static const defaultConfirmSignupIntro =
-      'A confirmation code was sent to your email. '
-      'Please enter the code to confirm your account.';
+      'A confirmation code was sent to your email. ';
+
+  /// Default intro2 for confirm signup card.
+  static const defaultConfirmSignupIntro2 =  'Please enter the code to confirm your account.';
 
   /// Default hint for confirmation code input.
   static const defaultConfirmationCodeHint = 'Confirmation Code';
@@ -226,6 +229,9 @@ class LoginMessages with ChangeNotifier {
 
   /// The intro text for the confirm signup card
   final String confirmSignupIntro;
+
+  /// The intro2 text for the confirm signup card
+  final String confirmSignupIntro2;
 
   /// Hint text of the confirmation code for confirming signup
   final String confirmationCodeHint;

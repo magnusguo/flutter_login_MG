@@ -272,8 +272,9 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     final textFieldWidth = cardWidth - cardPadding * 2;
 
     // 动态构建确认信息文本，包含用户名 2025-10-02 01:54:30
+    final countryCode = auth.additionalSignupData?['countryCode'] ?? '';
     final confirmIntroText = auth.username.isNotEmpty
-        ? '${messages.confirmSignupIntro} ${auth.username} ${messages.confirmSignupIntro2}'
+        ? '${messages.confirmSignupIntro} $countryCode ${auth.username} ${messages.confirmSignupIntro2}'
         : messages.confirmSignupIntro;
 
     return FittedBox(

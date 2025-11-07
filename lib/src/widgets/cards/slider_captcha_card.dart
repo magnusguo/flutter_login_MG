@@ -26,7 +26,7 @@ Future<bool> showSliderCaptcha(BuildContext context, String image_name) async {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('请完成滑动验证以继续注册'),
+                  const Text('请完成滑动验证以继续'),
                   const SizedBox(height: 20),
                   SliderCaptcha(
                     controller: captchaController,
@@ -54,13 +54,13 @@ Future<bool> showSliderCaptcha(BuildContext context, String image_name) async {
                         onPressed: () {
                           Navigator.of(context).pop(false); // 取消验证
                         },
-                        child: const Text('取消'),
+                        child: const Text('取 消'),
                       ),
                       TextButton(
                         onPressed: () {
                           captchaController.create(); // 刷新验证码
                         },
-                        child: const Text('刷新'),
+                        child: const Text('刷 新'),
                       ),
                     ],
                   ),

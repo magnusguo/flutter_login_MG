@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // backgroundImage: const AssetImage('assets/images/bgr.jpg'),
       logoTag: Constants.logoTag,
       titleTag: Constants.titleTag,
-      userType: LoginUserType.phone,
+      userType: LoginUserType.intlPhone,
       navigateBackAfterRecovery: true,
       onConfirmRecover: _signupConfirm,
       onConfirmSignup: _signupConfirm,

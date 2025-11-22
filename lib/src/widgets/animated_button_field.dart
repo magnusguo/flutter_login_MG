@@ -93,10 +93,25 @@ class _AnimatedButtonFieldState extends State<AnimatedButtonField> {
       return widget.buttonField.rightTextStyle!;
     }
 
-    // Otherwise, build style from individual properties
+    // Otherwise, build style from individual properties with dynamic sizing
+    //这里修改过代码, 因为在小屏幕尺寸下, 文字会显示不全 尤其是注册用户时 出生时辰这里, 所以需要动态调整字体大小 2025-11-23 02:49:03
+    double fontSize = widget.buttonField.rightTextSize ?? 14.0;
+    
+    // If no custom size specified, calculate based on text length and screen width
+    if (widget.buttonField.rightTextSize == null) {
+      final textLength = widget.buttonField.rightText.length;
+      final screenWidth = MediaQuery.of(context).size.width;
+      
+      // Dynamic font size calculation
+      if (textLength <= 10 || screenWidth >= 385) {
+        fontSize = 13.0;
+      } else {
+        fontSize = 11.5;
+      }
+    }
     return theme.textTheme.bodyMedium!.copyWith(
       color: widget.buttonField.rightTextColor ?? theme.textTheme.bodySmall?.color,
-      fontSize: widget.buttonField.rightTextSize ?? 14.0,
+      fontSize: fontSize,
     );
   }
 

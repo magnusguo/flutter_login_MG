@@ -93,12 +93,14 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     setState(() => _isSubmitting = true);
     final error = await auth.onConfirmSignup!(
       _code,
-      LoginData(
+      SignupData.fromSignupForm(
         name: auth.username,
         password: auth.password,
         isoCode: auth.phoneIsoCode,
         dialCode: auth.phoneDialCode,
         purePhoneNumber: auth.purePhoneNumber,
+        additionalSignupData: auth.additionalSignupData,
+        termsOfService: auth.getTermsOfServiceResults(),
       ),
     );
 
@@ -229,7 +231,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
             child: Text(
               canResend 
                 ? messages.resendCodeButton
-                : '重新发送 (${countdown}秒)',
+                : '重新发送 ($countdown秒)',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: canResend 
                   ? theme.textTheme.bodyMedium?.color

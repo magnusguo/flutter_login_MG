@@ -52,7 +52,7 @@ typedef RecoverCallback = Future<String?>? Function(String);
 
 /// Callback for confirming signup with a verification code.
 /// The result is an error message; callback succeeds if the message is null.
-typedef ConfirmSignupCallback = Future<String?>? Function(String, LoginData);
+typedef ConfirmSignupCallback = Future<String?>? Function(String, SignupData);
 
 /// Callback to determine if signup confirmation is required based on the login data.
 typedef ConfirmSignupRequiredCallback = Future<bool> Function(LoginData);

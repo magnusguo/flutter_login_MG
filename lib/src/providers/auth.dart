@@ -192,6 +192,33 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  // International phone number components
+  String? _phoneIsoCode;
+
+  /// The ISO country code for international phone number (e.g., "US", "CA", "CN").
+  String? get phoneIsoCode => _phoneIsoCode;
+  set phoneIsoCode(String? value) {
+    _phoneIsoCode = value;
+    notifyListeners();
+  }
+
+  String? _phoneDialCode;
+
+  /// The country dial code with + prefix (e.g., "+1", "+86").
+  String? get phoneDialCode => _phoneDialCode;
+  set phoneDialCode(String? value) {
+    _phoneDialCode = value;
+    notifyListeners();
+  }
+
+  String? _purePhoneNumber;
+
+  /// The pure phone number without the country dial code (e.g., "2022626879").
+  String? get purePhoneNumber => _purePhoneNumber;
+  set purePhoneNumber(String? value) {
+    _purePhoneNumber = value;
+    notifyListeners();
+  }
 
   /// 设置从Additional Signup Fields 跳转 verification code page时 是否应该发送验证码 2025-09-28 23:17:01
   /// 没有此设置, 每次从 additional signup fields 跳转 verification code page时 都会发送验证码 容易被滥用

@@ -64,6 +64,9 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       LoginData(
         name: auth.username,
         password: auth.password,
+        isoCode: auth.phoneIsoCode,
+        dialCode: auth.phoneDialCode,
+        purePhoneNumber: auth.purePhoneNumber,
       ),
     );
 

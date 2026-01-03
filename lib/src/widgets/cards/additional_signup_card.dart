@@ -165,6 +165,9 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
               password: auth.password,
               additionalSignupData: auth.additionalSignupData,
               termsOfService: auth.getTermsOfServiceResults(),
+              isoCode: auth.phoneIsoCode,
+              dialCode: auth.phoneDialCode,
+              purePhoneNumber: auth.purePhoneNumber,
             ),
           );
         }

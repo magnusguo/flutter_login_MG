@@ -96,6 +96,9 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       LoginData(
         name: auth.username,
         password: auth.password,
+        isoCode: auth.phoneIsoCode,
+        dialCode: auth.phoneDialCode,
+        purePhoneNumber: auth.purePhoneNumber,
       ),
     );
 
@@ -159,6 +162,9 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
         name: auth.username,
         password: auth.password,
         termsOfService: auth.getTermsOfServiceResults(),
+        isoCode: auth.phoneIsoCode,
+        dialCode: auth.phoneDialCode,
+        purePhoneNumber: auth.purePhoneNumber,
       ),
     );
 

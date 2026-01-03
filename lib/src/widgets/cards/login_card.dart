@@ -199,6 +199,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         LoginData(
           name: auth.username,
           password: auth.password,
+          isoCode: auth.phoneIsoCode,
+          dialCode: auth.phoneDialCode,
+          purePhoneNumber: auth.purePhoneNumber,
         ),
       );
     } else {
@@ -208,6 +211,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             name: auth.username,
             password: auth.password,
             termsOfService: auth.getTermsOfServiceResults(),
+            isoCode: auth.phoneIsoCode,
+            dialCode: auth.phoneDialCode,
+            purePhoneNumber: auth.purePhoneNumber,
           ),
         );
       } else {
@@ -217,6 +223,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
               name: auth.username,
               password: auth.password,
               termsOfService: auth.getTermsOfServiceResults(),
+              isoCode: auth.phoneIsoCode,
+              dialCode: auth.phoneDialCode,
+              purePhoneNumber: auth.purePhoneNumber,
             ),
           );
         }
@@ -350,6 +359,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             password: auth.password,
             termsOfService: auth.getTermsOfServiceResults(),
             additionalSignupData: auth.additionalSignupData,
+            isoCode: auth.phoneIsoCode,
+            dialCode: auth.phoneDialCode,
+            purePhoneNumber: auth.purePhoneNumber,
           ),
         );
         await control?.reverse();

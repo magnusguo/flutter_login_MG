@@ -7,6 +7,7 @@ import 'package:flutter_login_MG/src/widgets/term_of_service_checkbox.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart' as pnp;
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Represents the direction of inertial animation applied to a text field.
@@ -370,6 +371,18 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
           _phoneNumberController.selection = TextSelection.collapsed(
             offset: _phoneNumberController.text.length,
           );
+
+          // Save complete phone number information to Auth provider
+          final auth = Provider.of<Auth>(context, listen: false);
+          auth.phoneIsoCode = phoneNumber.isoCode;
+          auth.phoneDialCode = phoneNumber.dialCode;
+          // Extract pure phone number (without dial code)
+          if (phoneNumber.phoneNumber != null && phoneNumber.dialCode != null) {
+            auth.purePhoneNumber = phoneNumber.phoneNumber!.replaceFirst(phoneNumber.dialCode!, '');
+          } else {
+            auth.purePhoneNumber = null;
+          }
+
           widget.onSaved?.call(phoneNumber.phoneNumber);
         },
         validator: widget.validator,

@@ -301,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if (value != null &&
                 value.length < 7 &&
                 !phoneRegExp.hasMatch(value)) {
-              return '请输入正确的手机号, 本步骤无需输入国家区号';
+              return '请输入正确的手机号, 更改国家区号请点击国旗图标';
           }
           return null;
         },
@@ -321,6 +321,9 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint('Signup info');
         debugPrint('Name: ${signupData.name}');
         debugPrint('Password: ${signupData.password}');
+        debugPrint('Dial Code: ${signupData.dialCode}');
+        debugPrint('Pure Phone Number: ${signupData.purePhoneNumber}');
+        debugPrint('ISO Code: ${signupData.isoCode}');
 
         signupData.additionalSignupData?.forEach((key, value) {
           debugPrint('$key: $value');

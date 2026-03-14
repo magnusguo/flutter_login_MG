@@ -57,6 +57,11 @@ Flushbar<void> showErrorToast(
   String title,
   String message,
 ) {
+  // 按阅读速度自动计算：最少4秒，每15字增加1秒
+  final autoDuration = Duration(
+    seconds: (message.length / 15).ceil().clamp(4, 30),
+  );
+
   return Flushbar(
     title: title,
     message: message,
@@ -65,7 +70,7 @@ Flushbar<void> showErrorToast(
       size: 28,
       color: Colors.white,
     ),
-    duration: const Duration(seconds: 4),
+    duration: autoDuration,
     backgroundGradient: LinearGradient(
       colors: [Colors.red[600]!, Colors.red[400]!],
     ),

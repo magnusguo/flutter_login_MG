@@ -74,6 +74,8 @@ class Auth with ChangeNotifier {
     this.confirmSignupRequired,
     this.onResendCode,
     this.beforeAdditionalFieldsCallback,
+    this.initialResendCooldownSeconds = 30,
+    this.subsequentResendCooldownSeconds = 60,
     String username = '',
     String password = '',
     String confirmPassword = '',
@@ -82,7 +84,8 @@ class Auth with ChangeNotifier {
   })  : _username = username,
         _password = password,
         _confirmPassword = confirmPassword,
-        _mode = initialAuthMode;
+        _mode = initialAuthMode,
+        _activeResendCooldownSeconds = subsequentResendCooldownSeconds;
 
   /// Callback triggered when user logs in.
   final LoginCallback? onLogin;
@@ -113,6 +116,12 @@ class Auth with ChangeNotifier {
 
   /// Callback triggered before additional signup fields are shown.
   final BeforeAdditionalFieldsCallback? beforeAdditionalFieldsCallback;
+
+  /// Cooldown after the first captcha-gated signup send.
+  final int initialResendCooldownSeconds;
+
+  /// Cooldown after a successful resend on the confirm page.
+  final int subsequentResendCooldownSeconds;
 
   AuthType _authType = AuthType.userPassword;
 
@@ -231,32 +240,61 @@ class Auth with ChangeNotifier {
   }
 
 
-  ///发送验证码按钮60秒倒计时 
+  /// Last time a captcha-gated send started a cooldown.
   DateTime? _resendCodeTime;
+  int _activeResendCooldownSeconds;
 
   /// The time when the resend code was last sent.
   DateTime? get resendCodeTime => _resendCodeTime;
-  
+
   /// Sets the resend code time and notifies listeners.
-  void setResendCodeTime(DateTime? time) {
+  ///
+  /// When [time] is non-null and [cooldownSeconds] is omitted, keeps the
+  /// currently active duration (defaults to [subsequentResendCooldownSeconds]).
+  void setResendCodeTime(DateTime? time, {int? cooldownSeconds}) {
     _resendCodeTime = time;
+    if (time != null && cooldownSeconds != null) {
+      _activeResendCooldownSeconds = cooldownSeconds < 1 ? 1 : cooldownSeconds;
+    }
     notifyListeners();
   }
 
-  /// Checks if the user can resend the code (60 seconds have passed).
+  /// Starts the first-send cooldown (profile page captcha succeeded).
+  void startInitialResendCooldown() {
+    setResendCodeTime(
+      DateTime.now(),
+      cooldownSeconds: initialResendCooldownSeconds,
+    );
+  }
+
+  /// Starts the resend cooldown (confirm page captcha succeeded).
+  void startSubsequentResendCooldown() {
+    setResendCodeTime(
+      DateTime.now(),
+      cooldownSeconds: subsequentResendCooldownSeconds,
+    );
+  }
+
+  /// Clears cooldown so the resend button is immediately tappable.
+  void clearResendCooldown() {
+    _resendCodeTime = null;
+    notifyListeners();
+  }
+
+  /// Whether the user can tap resend (no active cooldown, or it has elapsed).
   bool get canResendCode {
     if (_resendCodeTime == null) return true;
     final now = DateTime.now();
     final difference = now.difference(_resendCodeTime!);
-    return difference.inSeconds >= 60;
+    return difference.inSeconds >= _activeResendCooldownSeconds;
   }
 
-  /// Gets the remaining seconds before the user can resend the code.
+  /// Remaining seconds before the user can resend the code.
   int get resendCountdownSeconds {
     if (_resendCodeTime == null) return 0;
     final now = DateTime.now();
     final difference = now.difference(_resendCodeTime!);
-    final remaining = 60 - difference.inSeconds;
+    final remaining = _activeResendCooldownSeconds - difference.inSeconds;
     return remaining > 0 ? remaining : 0;
   }
 

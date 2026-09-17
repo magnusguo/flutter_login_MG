@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login_MG/src/models/login_user_type.dart';
+import 'package:flutter_login_MG/src/models/resend_cooldown.dart';
 import 'package:flutter_login_MG/src/models/term_of_service.dart';
 import 'package:flutter_login_MG/src/models/user_form_field.dart';
 import 'package:flutter_login_MG/src/models/user_button_field.dart';
@@ -28,6 +29,7 @@ export 'package:sign_in_button/src/button_list.dart';
 
 export 'src/models/login_data.dart';
 export 'src/models/login_user_type.dart';
+export 'src/models/resend_cooldown.dart';
 export 'src/models/signup_data.dart';
 export 'src/models/term_of_service.dart';
 export 'src/models/user_form_field.dart';
@@ -344,6 +346,9 @@ class FlutterLogin extends StatefulWidget {
     this.onConfirmSignup,
     this.confirmSignupRequired,
     this.onResendCode,
+    this.initialResendCooldownSeconds = 30,
+    this.subsequentResendCooldownSeconds = 60,
+    this.resendCooldownController,
     this.savedUsername = '',
     this.savedPassword = '',
     this.initialAuthMode = AuthMode.login,
@@ -485,6 +490,21 @@ class FlutterLogin extends StatefulWidget {
   /// Only when onConfirmSignup is set
   final SignupCallback? onResendCode;
 
+  /// Seconds the resend button stays disabled after the first captcha-gated send.
+  ///
+  /// Defaults to 30. Use [ResendCooldown] presets (`s5` … `s60`) or any positive int.
+  final int initialResendCooldownSeconds;
+
+  /// Seconds the resend button stays disabled after a successful resend.
+  ///
+  /// Defaults to 60. Going back to the profile page and submitting again does
+  /// not restart this timer; remaining seconds continue.
+  final int subsequentResendCooldownSeconds;
+
+  /// Optional handle so the host app can [ResendCooldownController.clear]
+  /// (e.g. first background SMS send failed).
+  final ResendCooldownController? resendCooldownController;
+
   /// Prefilled (ie. saved from previous session) value at startup for username
   /// (Auth class calls username email, therefore we use saved Username here aswell)
   final String savedUsername;
@@ -606,6 +626,7 @@ class _FlutterLoginState extends State<FlutterLogin> with TickerProviderStateMix
 
   @override
   void dispose() {
+    widget.resendCooldownController?.detach();
     _loadingController.dispose();
     _logoController.dispose();
     _titleController.dispose();
@@ -843,22 +864,29 @@ class _FlutterLoginState extends State<FlutterLogin> with TickerProviderStateMix
           value: widget.theme ?? LoginTheme(),
         ),
         ChangeNotifierProvider(
-          create: (context) => Auth(
-            onLogin: widget.onLogin,
-            onSignup: widget.onSignup,
-            onRecoverPassword: widget.onRecoverPassword,
-            loginProviders: widget.loginProviders,
-            username: widget.savedUsername,
-            password: widget.savedPassword,
-            confirmPassword: widget.savedPassword,
-            onConfirmRecover: widget.onConfirmRecover,
-            onConfirmSignup: widget.onConfirmSignup,
-            confirmSignupRequired: widget.confirmSignupRequired,
-            beforeAdditionalFieldsCallback: widget.onSwitchToAdditionalFields,
-            onResendCode: widget.onResendCode,
-            termsOfService: widget.termsOfService,
-            initialAuthMode: widget.initialAuthMode,
-          ),
+          create: (context) {
+            final auth = Auth(
+              onLogin: widget.onLogin,
+              onSignup: widget.onSignup,
+              onRecoverPassword: widget.onRecoverPassword,
+              loginProviders: widget.loginProviders,
+              username: widget.savedUsername,
+              password: widget.savedPassword,
+              confirmPassword: widget.savedPassword,
+              onConfirmRecover: widget.onConfirmRecover,
+              onConfirmSignup: widget.onConfirmSignup,
+              confirmSignupRequired: widget.confirmSignupRequired,
+              beforeAdditionalFieldsCallback: widget.onSwitchToAdditionalFields,
+              onResendCode: widget.onResendCode,
+              termsOfService: widget.termsOfService,
+              initialAuthMode: widget.initialAuthMode,
+              initialResendCooldownSeconds: widget.initialResendCooldownSeconds,
+              subsequentResendCooldownSeconds:
+                  widget.subsequentResendCooldownSeconds,
+            );
+            widget.resendCooldownController?.attach(auth);
+            return auth;
+          },
         ),
       ],
       child: Scaffold(

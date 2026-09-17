@@ -191,8 +191,8 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     setState(() => _isSubmitting = false);
     await _fieldSubmitController.reverse();
     
-    // Set resend time in Auth provider and start timer
-    auth.setResendCodeTime(DateTime.now());
+    // Subsequent cooldown after a captcha-gated resend
+    auth.startSubsequentResendCooldown();
     _startResendTimer();
     
     return true;

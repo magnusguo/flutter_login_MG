@@ -183,19 +183,20 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
       setState(() => _isSubmitting = false);
       return false;
     } else {
-      if (mounted && (auth.codeSentToPhoneNumber=='' || auth.codeSentToPhoneNumber!=auth.username)) {
+      final isFirstCodeSend = auth.codeSentToPhoneNumber == '' ||
+          auth.codeSentToPhoneNumber != auth.username;
+      if (mounted && isFirstCodeSend) {
         showSuccessToast(
           context,
           messages.flushbarTitleSuccess,
           messages.signUpSuccess,
           const Duration(seconds: 4),
         );
-        //验证码发送成功了, 记录codeSentToPhoneNumber
         auth.codeSentToPhoneNumber = auth.username;
+        auth.startInitialResendCooldown();
       }
 
       setState(() => _isSubmitting = false);
-      // await _loadingController.reverse();
       widget.onSubmitCompleted();
       return true;
     }

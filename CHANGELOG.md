@@ -1,3 +1,9 @@
+## 5.1.8
+Features:
+- Configurable resend cooldown: `initialResendCooldownSeconds` (default 30) and `subsequentResendCooldownSeconds` (default 60)
+- `ResendCooldown` presets (5 / 10 / 15 / 20 / 30 / 60) and `ResendCooldownController.clear()`
+- First captcha-gated signup send starts the initial cooldown; going back to the profile page does not resend or reset remaining seconds
+
 ## 5.1.1
 Features:
 - Customized by Magnus 2025-09-05 02:03:50

@@ -64,18 +64,37 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
   void initState() {
     super.initState();
 
+    // Prefer last submitted additionalSignupData so returning from the
+    // confirm page restores edits instead of stale formFields snapshots.
+    final saved =
+        Provider.of<Auth>(context, listen: false).additionalSignupData;
+
+    String initialValue(String keyName, String fallback) {
+      final value = saved?[keyName];
+      if (value != null && value.trim().isNotEmpty) {
+        return value;
+      }
+      return fallback;
+    }
+
     _nameControllers = {
       for (final field in widget.formFields)
         if (field.fieldType == UserFieldType.form)
           field.keyName: TextEditingController(
-            text: (field as UserFormField).defaultValue,
+            text: initialValue(
+              field.keyName,
+              (field as UserFormField).defaultValue,
+            ),
           ),
     };
 
-    // Initialize button field values with their initial rightText values
     _buttonFieldValues = {
       for (final field in widget.formFields)
-        if (field.fieldType == UserFieldType.button) field.keyName: (field as UserButtonField).rightText,
+        if (field.fieldType == UserFieldType.button)
+          field.keyName: initialValue(
+            field.keyName,
+            (field as UserButtonField).rightText,
+          ),
     };
 
     // Check for duplicate keyNames

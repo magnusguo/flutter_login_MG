@@ -1,3 +1,7 @@
+## 5.1.9
+Bugs fixed:
+- Returning from the signup confirm page now restores additional profile fields from the last submitted `additionalSignupData` instead of stale form snapshots
+
 ## 5.1.8
 Features:
 - Configurable resend cooldown: `initialResendCooldownSeconds` (default 30) and `subsequentResendCooldownSeconds` (default 60)

@@ -31,6 +31,7 @@ part 'additional_signup_card.dart';
 part 'login_card.dart';
 part 'recover_card.dart';
 part 'recover_confirm_card.dart';
+part 'resend_countdown.dart';
 part 'signup_confirm_card.dart';
 
 /// The main card widget that wraps and controls all auth-related flows,

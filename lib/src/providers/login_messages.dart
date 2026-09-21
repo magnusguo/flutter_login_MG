@@ -19,6 +19,7 @@ class LoginMessages with ChangeNotifier {
     this.loginButton = defaultLoginButton,
     this.signupButton = defaultSignupButton,
     this.recoverPasswordButton = defaultRecoverPasswordButton,
+    this.recoverPasswordCountdownButton = defaultRecoverPasswordCountdownButton,
     this.recoverPasswordIntro = defaultRecoverPasswordIntro,
     this.recoverPasswordDescription = defaultRecoverPasswordDescription,
     this.goBackButton = defaultGoBackButton,
@@ -38,6 +39,7 @@ class LoginMessages with ChangeNotifier {
     this.confirmationCodeValidationError =
         defaultConfirmationCodeValidationError,
     this.resendCodeButton = defaultResendCodeButton,
+    this.resendCooldownError = defaultResendCooldownError,
     this.resendCodeSuccess = defaultResendCodeSuccess,
     this.confirmSignupButton = defaultConfirmSignupButton,
     this.confirmSignupSuccess = defaultConfirmSignupSuccess,
@@ -66,6 +68,11 @@ class LoginMessages with ChangeNotifier {
 
   /// Default label for password recovery button.
   static const defaultRecoverPasswordButton = 'RECOVER';
+
+  /// Default label while password recovery is cooling down.
+  ///
+  /// `{seconds}` is replaced with the remaining seconds, zero-padded to 2 digits.
+  static const defaultRecoverPasswordCountdownButton = 'RECOVER ({seconds}s)';
 
   /// Default intro text for password recovery form.
   static const defaultRecoverPasswordIntro = 'Reset your password here';
@@ -142,6 +149,12 @@ class LoginMessages with ChangeNotifier {
   /// Default label for resend code button.
   static const defaultResendCodeButton = 'Resend Code';
 
+  /// Shown when a send is blocked because the cooldown is still running.
+  ///
+  /// `{seconds}` is replaced with the remaining seconds.
+  static const defaultResendCooldownError =
+      'Please wait {seconds}s before requesting a new code';
+
   /// Default message after resending the confirmation code.
   static const defaultResendCodeSuccess = 'A new email has been sent.';
 
@@ -178,6 +191,15 @@ class LoginMessages with ChangeNotifier {
 
   /// Recover password button's label
   final String recoverPasswordButton;
+
+  /// Recover password button label while cooling down. Use `{seconds}`.
+  final String recoverPasswordCountdownButton;
+
+  /// Button label for [recoverPasswordCountdownButton], seconds padded to 2 digits.
+  String recoverPasswordCountdownLabel(int seconds) {
+    final padded = seconds.toString().padLeft(2, '0');
+    return recoverPasswordCountdownButton.replaceAll('{seconds}', padded);
+  }
 
   /// Intro in password recovery form
   final String recoverPasswordIntro;
@@ -241,6 +263,15 @@ class LoginMessages with ChangeNotifier {
 
   /// Resend code button's label
   final String resendCodeButton;
+
+  /// Error toast when a code request is blocked by the shared send cooldown.
+  /// Use `{seconds}`.
+  final String resendCooldownError;
+
+  /// Toast text for [resendCooldownError]. Seconds are not padded.
+  String resendCooldownMessage(int seconds) {
+    return resendCooldownError.replaceAll('{seconds}', seconds.toString());
+  }
 
   /// The success message to show after resending confirmation code
   final String resendCodeSuccess;

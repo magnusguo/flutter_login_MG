@@ -29,7 +29,7 @@ class _RecoverCard extends StatefulWidget {
 }
 
 class _RecoverCardState extends State<_RecoverCard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, _ResendCountdownMixin {
   final GlobalKey<FormState> _formRecoverKey = GlobalKey();
 
   bool _isSubmitting = false;
@@ -49,10 +49,12 @@ class _RecoverCardState extends State<_RecoverCard>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+    attachCountdownListener();
   }
 
   @override
   void dispose() {
+    detachCountdownListener();
     _submitController.dispose();
     super.dispose();
   }
@@ -63,6 +65,15 @@ class _RecoverCardState extends State<_RecoverCard>
     }
     final auth = Provider.of<Auth>(context, listen: false);
     final messages = Provider.of<LoginMessages>(context, listen: false);
+
+    if (!auth.canResendCode) {
+      showErrorToast(
+        context,
+        messages.flushbarTitleError,
+        messages.resendCooldownMessage(auth.resendCountdownSeconds),
+      );
+      return false;
+    }
 
     _formRecoverKey.currentState!.save();
     await _submitController.forward();
@@ -88,6 +99,8 @@ class _RecoverCardState extends State<_RecoverCard>
       }
 
       setState(() => _isSubmitting = false);
+      auth.startNextResendCooldown();
+      startCountdownTicker();
       widget.onSubmitCompleted();
       return true;
     }
@@ -117,10 +130,21 @@ class _RecoverCardState extends State<_RecoverCard>
   }
 
   Widget _buildRecoverButton(ThemeData theme, LoginMessages messages) {
-    return AnimatedButton(
-      controller: _submitController,
-      text: messages.recoverPasswordButton,
-      onPressed: !_isSubmitting ? _submit : null,
+    return Consumer<Auth>(
+      builder: (context, auth, child) {
+        final canRecover = auth.canResendCode;
+        final label = canRecover
+            ? messages.recoverPasswordButton
+            : messages.recoverPasswordCountdownLabel(
+                auth.resendCountdownSeconds,
+              );
+        return AnimatedButton(
+          controller: _submitController,
+          text: label,
+          animateTextChanges: false,
+          onPressed: (!_isSubmitting && canRecover) ? _submit : null,
+        );
+      },
     );
   }
 

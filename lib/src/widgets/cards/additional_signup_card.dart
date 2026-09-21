@@ -156,6 +156,19 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
     final auth = Provider.of<Auth>(context, listen: false);
 
     _formCompleteSignupKey.currentState!.save();
+
+    final needsSend = auth.authType == AuthType.userPassword &&
+        (auth.codeSentToPhoneNumber.isEmpty ||
+            auth.codeSentToPhoneNumber != auth.username);
+    if (needsSend && !auth.canResendCode) {
+      showErrorToast(
+        context,
+        messages.flushbarTitleError,
+        messages.resendCooldownMessage(auth.resendCountdownSeconds),
+      );
+      return false;
+    }
+
     await _submitController.forward();
 
     setState(() => _isSubmitting = true);

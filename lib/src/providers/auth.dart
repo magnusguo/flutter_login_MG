@@ -275,6 +275,18 @@ class Auth with ChangeNotifier {
     );
   }
 
+  /// First successful send in this session uses the initial cooldown;
+  /// later sends use the subsequent cooldown.
+  ///
+  /// Shared by signup and password recovery so one SMS channel has one timer.
+  void startNextResendCooldown() {
+    if (_resendCodeTime == null) {
+      startInitialResendCooldown();
+    } else {
+      startSubsequentResendCooldown();
+    }
+  }
+
   /// Clears cooldown so the resend button is immediately tappable.
   void clearResendCooldown() {
     _resendCodeTime = null;

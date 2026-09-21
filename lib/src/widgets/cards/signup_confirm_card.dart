@@ -23,7 +23,7 @@ class _ConfirmSignupCard extends StatefulWidget {
 }
 
 class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, _ResendCountdownMixin {
   final GlobalKey<FormState> _formRecoverKey = GlobalKey();
 
   // List of animation controller for every field
@@ -31,9 +31,6 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
 
   var _isSubmitting = false;
   var _code = '';
-  
-  // Resend code countdown timer (for UI updates)
-  Timer? _resendTimer;
 
   @override
   void initState() {
@@ -43,39 +40,13 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    
-    // Check and restore countdown state from Auth provider
-    _checkAndRestoreCountdown();
-  }
-
-  void _checkAndRestoreCountdown() {
-    final auth = Provider.of<Auth>(context, listen: false);
-    if (!auth.canResendCode) {
-      _startResendTimer();
-    }
-  }
-
-  void _startResendTimer() {
-    _resendTimer?.cancel();
-    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final auth = Provider.of<Auth>(context, listen: false);
-      if (auth.canResendCode) {
-        timer.cancel();
-        if (mounted) {
-          setState(() {}); // Trigger UI update
-        }
-      } else {
-        if (mounted) {
-          setState(() {}); // Update countdown display
-        }
-      }
-    });
+    attachCountdownListener();
   }
 
   @override
   void dispose() {
     _fieldSubmitController.dispose();
-    _resendTimer?.cancel();
+    detachCountdownListener();
     super.dispose();
   }
 
@@ -193,7 +164,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     
     // Subsequent cooldown after a captcha-gated resend
     auth.startSubsequentResendCooldown();
-    _startResendTimer();
+    startCountdownTicker();
     
     return true;
   }

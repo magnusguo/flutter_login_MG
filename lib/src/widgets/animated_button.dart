@@ -19,10 +19,18 @@ class AnimatedButton extends StatefulWidget {
     super.key,
     this.loadingColor,
     this.color,
+    this.animateTextChanges = true,
   });
 
   /// The label displayed inside the button.
   final String text;
+
+  /// When false, label updates are instant.
+  ///
+  /// [AnimatedText] flips for 500ms on every change, which looks wrong for a
+  /// per-second countdown. Callers that change [text] every second should
+  /// pass false.
+  final bool animateTextChanges;
 
   /// The background color of the button.
   final Color? color;
@@ -192,12 +200,18 @@ class _AnimatedButtonState extends State<AnimatedButton>
   }
 
   Widget _buildButtonText(ThemeData theme) {
+    final label = widget.animateTextChanges
+        ? AnimatedText(
+            text: widget.text,
+            style: theme.textTheme.labelLarge,
+          )
+        : Text(
+            widget.text,
+            style: theme.textTheme.labelLarge,
+          );
     return FadeTransition(
       opacity: _textOpacityAnimation,
-      child: AnimatedText(
-        text: widget.text,
-        style: theme.textTheme.labelLarge,
-      ),
+      child: label,
     );
   }
 

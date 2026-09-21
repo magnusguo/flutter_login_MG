@@ -1,3 +1,10 @@
+## 5.1.10
+Features:
+- Password recovery reuses the signup send cooldown: first successful send waits 30s, later sends wait 60s
+- Recover button shows `recoverPasswordCountdownButton` while cooling down and does not open captcha
+- Signup profile submit is blocked while a send cooldown is active if it would send another code
+- `AnimatedButton.animateTextChanges` can disable the flip animation for per-second labels
+
 ## 5.1.9
 Bugs fixed:
 - Returning from the signup confirm page now restores additional profile fields from the last submitted `additionalSignupData` instead of stale form snapshots

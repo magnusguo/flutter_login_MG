@@ -12,6 +12,9 @@
 - 返回资料页再提交：不发码、不重新滑块，倒计时按剩余秒数继续
 - 发码失败可用 `ResendCooldownController.clear()` 立刻恢复可点
 - 状态在 `Auth` 中持久化，切页不丢
+- 找回密码与注册共用同一套冷却：`startNextResendCooldown()` 首次 30 秒、之后 60 秒
+- 找回密码按钮冷却中显示 `recoverPasswordCountdownButton`，不可点，不会再唤出滑图
+- 注册资料页只有「确实要再发一条短信」时才受冷却拦截；同一号码返回再提交不发码、不拦截
 
 ## 修改的文件
 

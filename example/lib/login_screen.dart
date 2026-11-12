@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<String?> _signupUser(SignupData data) async {
     // 显示滑动验证
-    final captchaResult = await showSliderCaptcha(context, 'Verification_Img.png');
+    final captchaResult = await showSliderCaptcha(context);
     
     if (!captchaResult) {
       return '滑动验证失败，请重试';

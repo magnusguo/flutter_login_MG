@@ -76,6 +76,7 @@ class Auth with ChangeNotifier {
     this.beforeAdditionalFieldsCallback,
     this.initialResendCooldownSeconds = 30,
     this.subsequentResendCooldownSeconds = 60,
+    this.captchaImage,
     String username = '',
     String password = '',
     String confirmPassword = '',
@@ -122,6 +123,9 @@ class Auth with ChangeNotifier {
 
   /// Cooldown after a successful resend on the confirm page.
   final int subsequentResendCooldownSeconds;
+
+  /// Image for the resend-code slider captcha. Null uses the bundled default.
+  final ImageProvider? captchaImage;
 
   AuthType _authType = AuthType.userPassword;
 

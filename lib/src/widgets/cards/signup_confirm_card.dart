@@ -116,7 +116,8 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     FocusScope.of(context).unfocus();
 
     // 先进行滑动验证
-    final captchaResult = await showSliderCaptcha(context, 'Verification_Img.png');
+    final captchaResult =
+        await showSliderCaptcha(context, image: auth.captchaImage);
     
     if (!captchaResult) {
       // 滑动验证失败，不执行后续逻辑，也不启动倒计时

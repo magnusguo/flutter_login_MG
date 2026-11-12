@@ -1,6 +1,6 @@
 name: flutter_login_MG
 description: A login widget with login/signup functionalities to help speed up development
-version: 5.1.10+20260922
+version: 5.1.11+20261113
 repository: https://github.com/magnusguo/flutter_login_MG
 screenshots:
   - description: 'This screenshot shows the default themed login screen..'
@@ -34,3 +34,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/ecorp.png
+    - assets/images/captcha_default.webp

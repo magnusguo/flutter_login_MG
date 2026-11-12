@@ -349,6 +349,7 @@ class FlutterLogin extends StatefulWidget {
     this.initialResendCooldownSeconds = 30,
     this.subsequentResendCooldownSeconds = 60,
     this.resendCooldownController,
+    this.captchaImage,
     this.savedUsername = '',
     this.savedPassword = '',
     this.initialAuthMode = AuthMode.login,
@@ -504,6 +505,12 @@ class FlutterLogin extends StatefulWidget {
   /// Optional handle so the host app can [ResendCooldownController.clear]
   /// (e.g. first background SMS send failed).
   final ResendCooldownController? resendCooldownController;
+
+  /// Image for the slider captcha shown before resending the signup code.
+  ///
+  /// Defaults to the image bundled with this package. Pass the same image to
+  /// `showSliderCaptcha(context, image: ...)` for captchas the host app opens.
+  final ImageProvider? captchaImage;
 
   /// Prefilled (ie. saved from previous session) value at startup for username
   /// (Auth class calls username email, therefore we use saved Username here aswell)
@@ -883,6 +890,7 @@ class _FlutterLoginState extends State<FlutterLogin> with TickerProviderStateMix
               initialResendCooldownSeconds: widget.initialResendCooldownSeconds,
               subsequentResendCooldownSeconds:
                   widget.subsequentResendCooldownSeconds,
+              captchaImage: widget.captchaImage,
             );
             widget.resendCooldownController?.attach(auth);
             return auth;

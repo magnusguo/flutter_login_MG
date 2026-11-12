@@ -3,10 +3,21 @@ import 'package:slider_captcha/slider_captcha.dart';
 
 // part of 'auth_card_builder.dart';
 
+/// 库自带的默认滑块验证图。
+const ImageProvider defaultCaptchaImage = AssetImage(
+  'assets/images/captcha_default.webp',
+  package: 'flutter_login_MG',
+);
+
 /// 显示滑动验证码对话框
 ///
+/// [image] 不传时使用库自带的 [defaultCaptchaImage]。
+///
 /// 返回 `true` 表示验证成功，`false` 表示验证失败或取消
-Future<bool> showSliderCaptcha(BuildContext context, String image_name) async {
+Future<bool> showSliderCaptcha(
+  BuildContext context, {
+  ImageProvider? image,
+}) async {
   final captchaController = SliderController();
   return await showDialog<bool>(
         context: context,
@@ -30,8 +41,8 @@ Future<bool> showSliderCaptcha(BuildContext context, String image_name) async {
                   const SizedBox(height: 20),
                   SliderCaptcha(
                     controller: captchaController,
-                    image: Image.asset(
-                      'assets/images/$image_name',
+                    image: Image(
+                      image: image ?? defaultCaptchaImage,
                       fit: BoxFit.fitWidth,
                     ),
                     colorBar: Colors.blue,

@@ -1,3 +1,14 @@
+## 5.1.11
+Bugs fixed:
+- Resend-code captcha no longer loads a hardcoded `assets/images/Verification_Img.png` from the host app; the image was missing whenever the host app did not ship that exact file
+
+Features:
+- The package bundles a default captcha image (`assets/images/captcha_default.webp`)
+- `FlutterLogin.captchaImage` overrides the image for the resend-code captcha
+
+Breaking changes:
+- `showSliderCaptcha(context, 'file.png')` is now `showSliderCaptcha(context, {ImageProvider? image})`; omit `image` to use the bundled default
+
 ## 5.1.10
 Features:
 - Password recovery reuses the signup send cooldown: first successful send waits 30s, later sends wait 60s

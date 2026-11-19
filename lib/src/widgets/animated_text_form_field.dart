@@ -308,6 +308,12 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     }
   }
 
+  /// 前缀槽至少 48x48。FaIcon 没有 Icon 自带的居中方框，不包一层会贴在槽的左上角。
+  Widget? _centeredPrefix(Widget? icon) {
+    if (icon == null) return null;
+    return Center(child: icon);
+  }
+
   Widget? _buildInertiaAnimation(Widget? child) {
     if (widget.inertiaController == null) {
       return child;
@@ -330,7 +336,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     return InputDecoration(
       labelText: widget.labelText,
       contentPadding: contentPadding,
-      prefixIcon: hideIcons ? null : _buildInertiaAnimation(widget.prefixIcon),
+      prefixIcon: hideIcons
+          ? null
+          : _centeredPrefix(_buildInertiaAnimation(widget.prefixIcon)),
       suffixIcon: hideIcons ? null : _buildInertiaAnimation(
         widget.loadingController != null
             ? FadeTransition(

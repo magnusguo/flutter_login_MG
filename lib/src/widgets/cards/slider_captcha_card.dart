@@ -41,6 +41,7 @@ Future<bool> showSliderCaptcha(
                   const SizedBox(height: 20),
                   SliderCaptcha(
                     controller: captchaController,
+                    title: '请向右滑动补全图片',
                     image: Image(
                       image: image ?? defaultCaptchaImage,
                       fit: BoxFit.fitWidth,

@@ -1,3 +1,8 @@
+## 5.1.13
+Bugs fixed:
+- Prefix icons that use FaIcon are centered in the input prefix slot, so they no longer cover the field label
+- Slider captcha bar title is 请向右滑动补全图片 instead of the English default from slider_captcha 1.1
+
 ## 5.1.12
 Features:
 - `font_awesome_flutter` 11：图标改用 `FaIcon`。`IconData` 在 Flutter 3.50 已是 final，10.x 的子类写法无法编译

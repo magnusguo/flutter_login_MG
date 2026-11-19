@@ -1,6 +1,7 @@
 ## 5.1.12
 Features:
 - `font_awesome_flutter` 11：图标改用 `FaIcon`。`IconData` 在 Flutter 3.50 已是 final，10.x 的子类写法无法编译
+- `sign_in_button` 升到 5，才能和 font_awesome 11 一起编译
 
 ## 5.1.11
 Bugs fixed:

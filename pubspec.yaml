@@ -20,7 +20,7 @@ dependencies:
   phone_numbers_parser: ^9.0.0
   provider: ^6.0.1
   quiver: ^3.0.1
-  sign_in_button: ^4.0.1
+  sign_in_button: ^5.0.0
   slider_captcha: ^1.0.2
   url_launcher: ^6.1.3
 

@@ -115,5 +115,5 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 /example/android/app/.cxx/
-/example/ios/Flutter/ephemeral/flutter_lldb_helper.py
-/example/ios/Flutter/ephemeral/flutter_lldbinit
+# Flutter 构建时自动生成的 iOS 临时文件（含 Swift Package Manager 集成产物），整个目录忽略
+/example/ios/Flutter/ephemeral/

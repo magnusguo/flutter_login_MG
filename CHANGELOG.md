@@ -1,6 +1,6 @@
 ## 5.1.13
 Bugs fixed:
-- Prefix icons that use FaIcon are centered in the input prefix slot, so they no longer cover the field label
+- Prefix icons that use FaIcon stay in the left 48px slot and are vertically centered. A bare Center expanded to the full field width and put the icon in the middle
 - Slider captcha bar title is 请向右滑动补全图片 instead of the English default from slider_captcha 1.1
 
 ## 5.1.12

@@ -308,10 +308,11 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     }
   }
 
-  /// 前缀槽至少 48x48。FaIcon 没有 Icon 自带的居中方框，不包一层会贴在槽的左上角。
+  /// 前缀槽拿到的是整个输入框宽度。不带 widthFactor 的 Center 会撑满这条宽度，
+  /// 图标就跑到输入框正中。1.0 让 Center 只占图标自身大小，再由装饰器收成左侧 48 方框。
   Widget? _centeredPrefix(Widget? icon) {
     if (icon == null) return null;
-    return Center(child: icon);
+    return Center(widthFactor: 1.0, heightFactor: 1.0, child: icon);
   }
 
   Widget? _buildInertiaAnimation(Widget? child) {

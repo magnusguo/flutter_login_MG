@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
-  testWidgets('FaIcon prefix sits in the center of the prefix slot', (
+  testWidgets('FaIcon prefix stays in the left slot and is vertically centered', (
     tester,
   ) async {
     const iconKey = Key('prefix-lock');
@@ -28,6 +28,7 @@ void main() {
     await tester.pump();
 
     final icon = find.byKey(iconKey);
+    final field = find.byType(TextFormField);
     final slot = find.ancestor(
       of: icon,
       matching: find.byWidgetPredicate(
@@ -40,9 +41,14 @@ void main() {
 
     expect(slot, findsOneWidget);
 
-    final iconCenter = tester.getRect(icon).center;
-    final slotCenter = tester.getRect(slot).center;
-    expect(iconCenter.dx, closeTo(slotCenter.dx, 0.5));
-    expect(iconCenter.dy, closeTo(slotCenter.dy, 0.5));
+    final iconRect = tester.getRect(icon);
+    final slotRect = tester.getRect(slot);
+    final fieldRect = tester.getRect(field);
+
+    expect(slotRect.width, lessThanOrEqualTo(56));
+    expect(iconRect.left - fieldRect.left, lessThanOrEqualTo(56));
+    expect(iconRect.center.dx, closeTo(slotRect.center.dx, 0.5));
+    expect(iconRect.center.dy, closeTo(slotRect.center.dy, 0.5));
+    expect(iconRect.center.dy, closeTo(fieldRect.center.dy, 1));
   });
 }

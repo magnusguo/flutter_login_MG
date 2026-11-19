@@ -152,7 +152,7 @@ class _AnimatedButtonFieldState extends State<AnimatedButtonField> {
                     height: 24,
                     alignment: Alignment.center,
                     child: widget.buttonField.icon ?? 
-                           const Icon(FontAwesomeIcons.solidCircleUser, size: 18),
+                           const FaIcon(FontAwesomeIcons.solidCircleUser, size: 18),
                   ),
                   const SizedBox(width: 12),
                   

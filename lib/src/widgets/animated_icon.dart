@@ -235,7 +235,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    //return Icon(FontAwesomeIcons.facebook);
+    //return FaIcon(FontAwesomeIcons.facebook);
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[

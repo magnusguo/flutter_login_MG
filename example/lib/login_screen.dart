@@ -90,7 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
         LoginProvider(
-          icon: FontAwesomeIcons.githubAlt,
+          // 11 起图标是 FaIconData，这里的按钮仍接收 IconData。
+          icon: FontAwesomeIcons.githubAlt.data,
           callback: () async {
             debugPrint('start github sign in');
             await Future<void>.delayed(loginTime);
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // userType: LoginUserType.contryCodeWithPhoneDisplay,
 
           keyName: 'countryCode',
-          icon: const Icon(FontAwesomeIcons.globe, size: 18),
+          icon: const FaIcon(FontAwesomeIcons.globe, size: 18),
           title: '手机号国家/区号',
           rightText: '中国 +86',
           rightTextColor: Colors.grey,
@@ -132,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
         UserButtonField(
           keyName: 'gender',
           title: '性 别',
-          icon: const Icon(FontAwesomeIcons.venusMars, size: 18),
+          icon: const FaIcon(FontAwesomeIcons.venusMars, size: 18),
           rightText: '男',
           rightTextColor: Colors.grey,
           onTap: (keyName) async {
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
         UserButtonField(
           keyName: 'birthplace',
           title: '出生地',
-          icon: const Icon(FontAwesomeIcons.locationDot, size: 18),
+          icon: const FaIcon(FontAwesomeIcons.locationDot, size: 18),
           rightText: '选择城市',
           rightTextColor: Colors.blue,
           rightTextSize: 13,
@@ -160,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
           UserButtonField(
           keyName: 'birthtime',
           title: '出生时辰',
-          icon: const Icon(FontAwesomeIcons.clock, size: 18),
+          icon: const FaIcon(FontAwesomeIcons.clock, size: 18),
           rightText: '选择时辰',
           rightTextColor: Colors.blue,
           rightTextSize: 13,

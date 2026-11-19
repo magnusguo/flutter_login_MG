@@ -1,3 +1,7 @@
+## 5.1.12
+Features:
+- `font_awesome_flutter` 11：图标改用 `FaIcon`。`IconData` 在 Flutter 3.50 已是 final，10.x 的子类写法无法编译
+
 ## 5.1.11
 Bugs fixed:
 - Resend-code captcha no longer loads a hardcoded `assets/images/Verification_Img.png` from the host app; the image was missing whenever the host app did not ship that exact file

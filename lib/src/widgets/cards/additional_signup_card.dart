@@ -258,7 +258,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard> with Ticke
           loadingController: widget.loadingController,
           width: width,
           labelText: formField.displayName,
-          prefixIcon: formField.icon ?? const Icon(FontAwesomeIcons.solidCircleUser),
+          prefixIcon: formField.icon ?? const FaIcon(FontAwesomeIcons.solidCircleUser),
           keyboardType: getKeyboardType(formField.userType),
           autofillHints: [
             getAutofillHints(formField.userType),
